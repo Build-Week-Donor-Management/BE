@@ -37,16 +37,29 @@ And then again the routes that require a req.body, it shows them with the body
 30	post (/donate/register/campaign)	 	create a member account of type campaign
 31	post (/donate/login)	                deletes a donation with a given id
 
-19	post (/donate/donation)	 {description: '$5000 for Feed the Children',money: 1,value: 321, location: 'Feed the children campaign',date: '2019-09-21', donorid: 1 }
-20	post (/donate/donor)	 {name: 'Waldo Wayne',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI',comdate: '2019-09-21',comtype: 'phone'}
-21	post (/donate/campaign/donation)	 { donationid: 1, campaignid: 2 }
-22	post (/donate/campaign)	 { name: 'Save the Whales', description: 'Stop people from killing whales', goal: 1000000 }
-23	put (/donate/donation/:id)	 { description: '$5000 for Feed the Children', money: 1, value: 321, location: 'Feed the children campaign', date: '2019-09-21',donorid: 1 }
-24	put (/donate/donor/:id)	 { name: 'Waldo Wayne', email: 'waldo@waldo.com', phone: '212-555-5555', address: '123 Park Lane, Geneva, WI', comdate: '2019-09-21', comtype: 'phone' }
-25	put (/donate/member/:id)	 { username: 'user1', password: 'something', type: 'board',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI' }
-26	put (/donate/campaign/:id)	 {name: 'Save the Whales', description: 'Stop people from killing whales', goal: 1000000 }
-27	put (/donate/campaign/donation/:id)	 { donationid: 1, campaignid: 2 }
-28	post (/donate/register/user)	 { username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI'}
-29	post (/donate/register/board)	 { username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI'}
-30	post (/donate/register/campaign)	 { username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI' }
-31	post (/donate/login)	 { username: 'user1', password: 'something' }
+19	post (/donate/donation)
+{description: '$5000 for Feed the Children',money: 1,value: 321, location: 'Feed the children campaign',date: '2019-09-21', donorid: 1 }
+20	post (/donate/donor)
+{name: 'Waldo Wayne',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI',comdate: '2019-09-21',comtype: 'phone'}
+21	post (/donate/campaign/donation)
+{ donationid: 1, campaignid: 2 }
+22	post (/donate/campaign)
+{ name: 'Save the Whales', description: 'Stop people from killing whales', goal: 1000000 }
+23	put (/donate/donation/:id)
+{ description: '$5000 for Feed the Children', money: 1, value: 321, location: 'Feed the children campaign', date: '2019-09-21',donorid: 1 }
+24	put (/donate/donor/:id)
+{ name: 'Waldo Wayne', email: 'waldo@waldo.com', phone: '212-555-5555', address: '123 Park Lane, Geneva, WI', comdate: '2019-09-21', comtype: 'phone' }
+25	put (/donate/member/:id)
+{ username: 'user1', password: 'something', type: 'board',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI' }
+26	put (/donate/campaign/:id)
+{name: 'Save the Whales', description: 'Stop people from killing whales', goal: 1000000 }
+27	put (/donate/campaign/donation/:id)
+{ donationid: 1, campaignid: 2 }
+28	post (/donate/register/user)
+{ username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI'}
+29	post (/donate/register/board)
+{ username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI'}
+30	post (/donate/register/campaign)
+{ username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI' }
+31	post (/donate/login)
+{ username: 'user1', password: 'something' }
