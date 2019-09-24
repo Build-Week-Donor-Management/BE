@@ -2,10 +2,14 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const db = require('../database/dbConfig.js');
 
 const Users = require('../users/users-model.js');
 const secrets = require('../config/secrets.js'); //<<<<<<<
+const jwt_decode = require('jwt-decode');
+const authenticate = require('../auth/authenticate-middleware.js');
 
+let token = '';
 // async function doit () {
 
 
@@ -17,7 +21,7 @@ const secrets = require('../config/secrets.js'); //<<<<<<<
 
 // doit()
 
-router.get('/', (req, res) => {
+router.get('/',(req,res) => {
     Users.find('route')
       .then(user => {
   // console.log('get route',user)
@@ -28,7 +32,9 @@ router.get('/', (req, res) => {
       });
   });
 
-  router.get('/member/user', (req, res) => {
+  router.get('/member/user',authenticate,(req,res) => {
+
+// Get saved data from sessionStorage
       Users.find('usermember')
         .then(user => {
     // console.log('get user',user)
@@ -39,7 +45,7 @@ router.get('/', (req, res) => {
         });
     });
 
-  router.get('/member/board', (req, res) => {
+  router.get('/member/board',authenticate,(req,res) => {
     Users.find('boardmember')
       .then(user => {
   // console.log('get user',user)
@@ -50,7 +56,7 @@ router.get('/', (req, res) => {
       });
   });
   
-  router.get('/member/campaign', (req, res) => {
+  router.get('/member/campaign',authenticate,(req,res) => {
     Users.find('campaignmember')
       .then(user => {
   // console.log('get user',user)
@@ -61,7 +67,7 @@ router.get('/', (req, res) => {
       });
   });
   
-  router.get('/campaign', (req, res) => {
+  router.get('/campaign',authenticate,(req,res) => {
     Users.find('campaign')
       .then(user => {
   // console.log('get user',user)
@@ -72,7 +78,10 @@ router.get('/', (req, res) => {
       });
   });
 
-  router.get('/member', (req, res) => {
+  router.get('/member',authenticate,authenticate,(req,res) => {
+    const decoded = jwt_decode(req.headers.authorization);
+
+     console.log('member user',decoded)
     Users.find('member')
       .then(user => {
   // console.log('get user',user)
@@ -83,7 +92,7 @@ router.get('/', (req, res) => {
       });
   });
   
-  router.get('/donor', (req, res) => {
+  router.get('/donor',authenticate,(req,res) => {
     Users.find('donor')
       .then(user => {
   // console.log('get user',user)
@@ -94,7 +103,7 @@ router.get('/', (req, res) => {
       });
   });
   
-  router.get('/donation', (req, res) => {
+  router.get('/donation',authenticate,(req,res) => {
     Users.find('donation')
       .then(user => {
   // console.log('get user',user)
@@ -105,7 +114,7 @@ router.get('/', (req, res) => {
       });
   });
   
-  router.get('/campaign/donation', (req, res) => {
+  router.get('/campaign/donation',authenticate,(req,res) => {
     Users.find('campaigndonation')
       .then(user => {
   // console.log('get user',user)
@@ -116,7 +125,7 @@ router.get('/', (req, res) => {
       });
   });
   
-  router.get('/campaign/donate', (req, res) => {
+  router.get('/campaign/donate',authenticate,(req,res) => {
     Users.find('campdonate')
       .then(user => {
   // console.log('get user',user)
@@ -127,7 +136,7 @@ router.get('/', (req, res) => {
       });
   });
   
-  router.get('/campaign/donor', (req, res) => {
+  router.get('/campaign/donor',authenticate,(req,res) => {
     Users.find('campaigndonor')
       .then(user => {
   // console.log('get user',user)
@@ -138,7 +147,7 @@ router.get('/', (req, res) => {
       });
   });
   
-  router.get('/camp/donor', (req, res) => {
+  router.get('/camp/donor',authenticate,(req,res) => {
     Users.find('campdonor')
       .then(user => {
   // console.log('get user',user)
@@ -149,7 +158,7 @@ router.get('/', (req, res) => {
       });
   });
 
-  router.get('/camp/don', (req, res) => {
+  router.get('/camp/don',authenticate,(req,res) => {
     Users.find('campdons')
       .then(user => {
   // console.log('get user',user)
@@ -160,7 +169,7 @@ router.get('/', (req, res) => {
       });
   });
 
-  router.delete('/member/:id', (req, res) => {
+  router.delete('/member/:id',authenticate,(req,res) => {
     let id = req.params.id;
    // console.log('id',id)
     Users.remove('member',id)
@@ -172,159 +181,115 @@ router.get('/', (req, res) => {
       });
   });
   
-  router.delete('/campaign/:id', (req, res) => {
-    let id = req.params.id;
-   // console.log('id',id)
-    Users.remove('campaign',id)
-      .then(removed => {
-          res.status(200).json(removed); 
-      })
+  router.put('/member',authenticate,(req,res) => {
+    // console.log('id',req.params.id)
+     Users.update('member',req.params.id,req.body)
+       .then(updated => {
+           res.status(201).json(updated); 
+       })
+       .catch(error => {
+         res.status(500).json(error+'');
+       });
+   });
+
+   function deleteRoute (req,res,table,type) {
+    const decoded = jwt_decode(req.headers.authorization);
+    const username = decoded.username
+    console.log(table,'going to see if authorized',username)
+    db.raw(`select count(username) as countit from member where type='${type}' and username ='${username}'`)
+      .then(result => {
+        console.log('result',result[0].countit)
+        if(!result[0].countit)
+        res.status(401).json('not authorized');
+else {
+  Users.remove(table,req.params.id)
+  .then(removed => {
+      res.status(200).json(removed); 
+  })
+        .catch(error => {
+          res.status(500).json(error+'');
+        });
+      }
+       })
       .catch(error => {
         res.status(500).json(error+'');
       });
-  });
-  
-  router.delete('/donor/:id', (req, res) => {
-    let id = req.params.id;
-   // console.log('id',id)
-    Users.remove('donor',id)
-      .then(removed => {
-          res.status(200).json(removed); 
-      })
+  }
+
+  function putRoute (req,res,table,type) {
+    const decoded = jwt_decode(req.headers.authorization);
+    const username = decoded.username
+    console.log(table,'going to see if authorized',username)
+    db.raw(`select count(username) as countit from member where type='${type}' and username ='${username}'`)
+      .then(result => {
+        console.log('result',result[0].countit)
+        if(!result[0].countit)
+        res.status(401).json('not authorized');
+else {
+        Users.update(table,req.params.id,req.body)
+        .then(updated => {
+            res.status(201).json('updated '+updated); 
+        })
+        .catch(error => {
+          res.status(500).json(error+'');
+        });
+      }
+       })
       .catch(error => {
         res.status(500).json(error+'');
       });
+  }
+
+ function postRoute (req,res,table,type) {
+     const decoded = jwt_decode(req.headers.authorization);
+     const username = decoded.username
+     console.log(table,'going to see if authorized',username)
+     db.raw(`select count(username) as countit from member where type='${type}' and username ='${username}'`)
+       .then(result => {
+         console.log('result',result[0].countit)
+         if(!result[0].countit)
+         res.status(401).json('not authorized');
+ else {
+  Users.add(table,req.body)
+  .then(updated => {
+      res.status(201).json(updated); 
+  })
+  .catch(error => {
+    res.status(500).json(error+'');
   });
-  
-  router.delete('/donation/:id', (req, res) => {
-    let id = req.params.id;
-   // console.log('id',id)
-    Users.remove('donation',id)
-      .then(removed => {
-          res.status(200).json(removed); 
-      })
-      .catch(error => {
-        res.status(500).json(error+'');
-      });
-  });
-  
-
-  router.post('/donation', (req, res) => {
-    // console.log('id',req.params.id)
-     Users.add('donation',req.body)
-       .then(updated => {
-           res.status(201).json(updated); 
-       })
+  }
+        })
        .catch(error => {
          res.status(500).json(error+'');
        });
-   });
+   }
+ 
+   router.delete('/campaign/:id',authenticate,(req,res) => deleteRoute(req, res, 'campaign','campaign'))
+   router.delete('/campaign/donation/:id',authenticate,(req,res) => postRoute(req, res, 'campaigndonation','user'))
+   router.delete('/donation/:id',authenticate,(req,res) => deleteRoute(req, res, 'donation','user'))
+   router.delete('/donor/:id',authenticate,(req,res) => deleteRoute(req, res, 'donor','user'))
+   router.put('/campaign/:id',authenticate,(req,res) => putRoute(req, res, 'campaign','campaign'))
+   router.put('/campaign/donation/:id',authenticate,(req,res) => postRoute(req, res, 'campaigndonation','user'))
+   router.put('/donation/:id',authenticate,(req,res) => putRoute(req, res, 'donation','user'))
+   router.put('/donor/:id',authenticate,(req,res) => putRoute(req, res, 'donor','user'))
+   router.post('/campaign',authenticate,(req,res) => postRoute(req, res, 'campaign','campaign'))
+   router.post('/campaign/donation',authenticate,(req,res) => postRoute(req, res, 'campaigndonation','user'))
+   router.post('/donation',authenticate,(req,res) => postRoute(req, res, 'donation','user'))
+   router.post('/donor',authenticate,(req,res) => postRoute(req, res, 'donor','user'))
 
-   router.post('/donor', (req, res) => {
-    // console.log('id',req.params.id)
-     Users.add('donor',req.body)
-       .then(updated => {
-           res.status(201).json(updated); 
-       })
-       .catch(error => {
-         res.status(500).json(error+'');
-       });
-   });
-
-   router.post('/campaign/donation', (req, res) => {
-    // console.log('id',req.params.id)
-     Users.add('campaigndonation',req.body)
-       .then(updated => {
-           res.status(201).json(updated); 
-       })
-       .catch(error => {
-         res.status(500).json(error+'');
-       });
-   });
-
-   router.post('/campaign', (req, res) => {
-    // console.log('id',req.params.id)
-     Users.add('campaign',req.body)
-       .then(updated => {
-           res.status(201).json(updated); 
-       })
-       .catch(error => {
-         res.status(500).json(error+'');
-       });
-   });
-
-   router.put('/donation/:id', (req, res) => {
-    // console.log('id',req.params.id)
-     Users.update('donation',req.params.id,req.body)
-       .then(updated => {
-           res.status(201).json('updated '+updated); 
-       })
-       .catch(error => {
-         res.status(500).json(error+'');
-       });
-   });
-
-   router.put('/donor/:id', (req, res) => {
-    // console.log('id',req.params.id)
-     Users.update('donor',req.params.id,req.body)
-       .then(updated => {
-           res.status(201).json('updated '+updated); 
-       })
-       .catch(error => {
-         res.status(500).json(error+'');
-       });
-   });
-   router.put('/member/:id', (req, res) => {
-    // console.log('id',req.params.id)
-    let user = req.body;
-    if(req.body.password)
-    {
-        const hash = bcrypt.hashSync(user.password, 10); // 2 ^ n
-        user.password = hash;      
-    }
-     Users.update('member',req.params.id,user)
-       .then(updated => {
-           res.status(201).json('updated '+updated); 
-       })
-       .catch(error => {
-         res.status(500).json(error+'');
-       });
-   });
-
-   router.put('/campaign/:id', (req, res) => {
-    // console.log('id',req.params.id)
-     Users.update('campaign',req.params.id,req.body)
-       .then(updated => {
-           res.status(201).json('updated '+updated); 
-       })
-       .catch(error => {
-         res.status(500).json(error+'');
-       });
-   });
-
-   router.put('/campaign/donation/:id', (req, res) => {
-    // console.log('id',req.params.id)
-     Users.update('campaigndonation',req.params.id,req.body)
-       .then(updated => {
-           res.status(201).json('updated '+updated); 
-       })
-       .catch(error => {
-         res.status(500).json(error+'');
-       });
-   });
-
-   router.post('/register/user', (req, res) => {
+   router.post('/register/user' ,(req, res) => {
     // console.log('req',req.body)
     let user = req.body;
     const hash = bcrypt.hashSync(user.password, 10); // 2 ^ n
     user.password = hash;
     user.type = 'user'
-  // console.log('register user',user)
+  console.log('register user',user)
     Users.add('member',user)
       .then(saved => {
-  // console.log('saved',saved)
-        const token =generateToken(user)
+  console.log('saved',saved)
+        token =generateToken(user)
         saved.token=token
+        // res.status(201).json(saved).json(token);
         res.status(201).json(saved);
       })
       .catch(error => {
@@ -342,7 +307,7 @@ router.get('/', (req, res) => {
     Users.add('member',user)
       .then(saved => {
   // console.log('saved',saved)
-        const token =generateToken(user)
+        token =generateToken(user)
         saved.token=token
         res.status(201).json(saved);
       })
@@ -361,7 +326,7 @@ router.get('/', (req, res) => {
     Users.add('member',user)
       .then(saved => {
   // console.log('saved',saved)
-        const token =generateToken(user)
+        token =generateToken(user)
         saved.token=token
         res.status(201).json(saved);
       })
@@ -372,12 +337,17 @@ router.get('/', (req, res) => {
       
 router.post('/login', (req, res) => {
   let { username, password } = req.body;
-  Users.findBy('member',{ username })
+    Users.findBy('member',{ username })
     .first()
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
-        const token = generateToken(user);
-        res.status(200).json({ token });
+        token = generateToken(user);
+        user.token = token
+        const decoded = jwt_decode(token);
+  res.status(200).json(user);
+
+console.log('post login decoded token',decoded)
+// return res.json({token: jwt.sign({ email: user.email, fullName: user.fullName, _id: user._id}, 'RESTFULAPIs')});        res.status(200).json({ token });
       } else {
         res.status(401).json({ message: 'Invalid Credentials' });
       }
@@ -389,9 +359,8 @@ router.post('/login', (req, res) => {
 
 function generateToken(user) {
   const payload = {
-    username: user.username,
-    dept: user.department
-  };
+    username: user.username
+    };
   const options = {
     expiresIn: '1d',
   };
