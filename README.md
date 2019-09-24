@@ -1,5 +1,5 @@
 # BE
-(This reads better if you read it in Visual Studoio Code applicaiton)
+(This reads better if you read it in the Visual Studio Code applicaiton)
 
 Here are the routes and their descriptions
 
