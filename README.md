@@ -1,4 +1,6 @@
 # BE
+(This reads better if you read it in Visual Studoio Code applicaiton)
+
 Here are the routes and their descriptions
 
 And then again the routes that require a req.body, it shows them with the body
