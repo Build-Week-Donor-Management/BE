@@ -42,24 +42,31 @@ Posts to add new objects to working tables
 19	post (/donate/donation)
 {description: '$5000 for Feed the Children',money: 1,value: 321, location: 'Feed the children campaign',date: '2019-09-21', donorid: 1 }
 {money: 1, donorid: 1 } minimum needed body as zero value is default
+
 20	post (/donate/donor)
 {name: 'Waldo Wayne',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI',comdate: '2019-09-21',comtype: 'phone'}
+
 21	post (/donate/campaign/donation)
 { donationid: 1, campaignid: 2 }
+
 22	post (/donate/campaign)
 { name: 'Save the Whales', description: 'Stop people from killing whales', goal: 1000000 }
 { name: 'Save the Whales', goal: 1000000 } minimum body
 
 Posts to register (make accounts) or log in
+
 28	post (/donate/register/user)
 { username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI'}
 { username: 'user1', password: 'something''} minimum needed body
+
 29	post (/donate/register/board)
 { username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI'}
 { username: 'user1', password: 'something''} minimum needed body
+
 30	post (/donate/register/campaign)
 { username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI' }
 { username: 'user1', password: 'something''} minimum needed body
+
 31	post (/donate/login)
 { username: 'user1', password: 'something' }
 
@@ -68,15 +75,56 @@ Puts to change values in fields in database
 23	put (/donate/donation/:id)
 { description: '$5000 for Feed the Children', money: 1, value: 321, location: 'Feed the children campaign', date: '2019-09-21',donorid: 1 }
 minimum need to change at least one of the above key values
+
 24	put (/donate/donor/:id)
 { name: 'Waldo Wayne', email: 'waldo@waldo.com', phone: '212-555-5555', address: '123 Park Lane, Geneva, WI', comdate: '2019-09-21', comtype: 'phone' }
 minimum need to change at least one of the above key values
+
 25	put (/donate/member/:id)
 { username: 'user1', password: 'something', type: 'board',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI' }
 minimum need to change at least one of the above key values
+
 26	put (/donate/campaign/:id)
 {name: 'Save the Whales', description: 'Stop people from killing whales', goal: 1000000 }
 minimum need to change at least one of the above key values
+
 27	put (/donate/campaign/donation/:id)
 { donationid: 1, campaignid: 2 }
 minimum need to change at least one of the above key values
+
+Suggested register and login calls to database
+
+  (Some where else in your code you would have made a request object like this) req = {username: username, password: password}
+  (Some where else in your code you would have made a type like this) type = 'user'
+
+ axios.post('https://donation-management.herokuapp.com/donate/register/'+type ,req,res)
+.then (data =>   
+        {
+          console.log('data',data) 
+        localStorage.setItem('token', data.data.token) 
+      }
+    )
+
+ axios.post('https://donation-management.herokuapp.com/donate/login' ,req,res)
+.then (data =>   
+        {
+          console.log('data',data) 
+        localStorage.setItem('token', data.data.token) 
+      }
+    )
+
+
+Suggested for other calls to database
+
+  (Some where else in your code you would have made a request object like this)  req = {"goal": "99998"}
+  (Some where else in your code you would have made an id like this)  id = 1
+
+                const authorization = localStorage.getItem('token') 
+                      await axios.putt(url+'/donate/campaign/'+id,
+                      { headers: { Authorization: authorization } }
+                      ,res)
+                      .then (data =>   
+                        {
+                          setData(data.data) 
+                       }
+                    )
