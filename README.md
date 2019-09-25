@@ -35,7 +35,7 @@ And then again the routes that require a req.body, it shows them with the body
 28	post (/donate/register/user)	    	create a member account of type user
 29	post (/donate/register/board)	    	create a member account of type board
 30	post (/donate/register/campaign)	 	create a member account of type campaign
-31	post (/donate/login)	                deletes a donation with a given id
+31	post (/donate/login)	                logs you in
 
 Posts to add new objects to working tables
 
