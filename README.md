@@ -37,6 +37,8 @@ And then again the routes that require a req.body, it shows them with the body
 30	post (/donate/register/campaign)	 	create a member account of type campaign
 31	post (/donate/login)	                deletes a donation with a given id
 
+Posts to add new objects to working tables
+
 19	post (/donate/donation)
 {description: '$5000 for Feed the Children',money: 1,value: 321, location: 'Feed the children campaign',date: '2019-09-21', donorid: 1 }
 {money: 1, donorid: 1 } minimum needed body as zero value is default
@@ -47,6 +49,22 @@ And then again the routes that require a req.body, it shows them with the body
 22	post (/donate/campaign)
 { name: 'Save the Whales', description: 'Stop people from killing whales', goal: 1000000 }
 { name: 'Save the Whales', goal: 1000000 } minimum body
+
+Posts to register (make accounts) or log in
+28	post (/donate/register/user)
+{ username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI'}
+{ username: 'user1', password: 'something''} minimum needed body
+29	post (/donate/register/board)
+{ username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI'}
+{ username: 'user1', password: 'something''} minimum needed body
+30	post (/donate/register/campaign)
+{ username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI' }
+{ username: 'user1', password: 'something''} minimum needed body
+31	post (/donate/login)
+{ username: 'user1', password: 'something' }
+
+Puts to change values in fields in database
+
 23	put (/donate/donation/:id)
 { description: '$5000 for Feed the Children', money: 1, value: 321, location: 'Feed the children campaign', date: '2019-09-21',donorid: 1 }
 minimum need to change at least one of the above key values
@@ -62,14 +80,3 @@ minimum need to change at least one of the above key values
 27	put (/donate/campaign/donation/:id)
 { donationid: 1, campaignid: 2 }
 minimum need to change at least one of the above key values
-28	post (/donate/register/user)
-{ username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI'}
-{ username: 'user1', password: 'something''} minimum needed body
-29	post (/donate/register/board)
-{ username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI'}
-{ username: 'user1', password: 'something''} minimum needed body
-30	post (/donate/register/campaign)
-{ username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI' }
-{ username: 'user1', password: 'something''} minimum needed body
-31	post (/donate/login)
-{ username: 'user1', password: 'something' }
