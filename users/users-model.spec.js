@@ -32,12 +32,12 @@ describe('users model', () => {
     it('should get routes from the site', async () => {
       
         let routes = await  axios.get('https://donation-management.herokuapp.com/donate')
-        expect(routes.data.length).toBe(30);
+        expect(routes.data.length).toBe(31);
       });
       it('should get routes from the site', async () => {
       
         let routes = await  axios.get('https://donation-management.herokuapp.com/donate')
-        expect(routes.data).toHaveLength(30);
+        expect(routes.data).toHaveLength(31);
       });
     
   });
