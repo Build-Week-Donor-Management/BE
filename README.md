@@ -120,7 +120,7 @@ Suggested for other calls to database
   (Some where else in your code you would have made an id like this)  id = 1
 
                 const authorization = localStorage.getItem('token') 
-                      await axios.putt(url+'/donate/campaign/'+id,
+                      axios.putt(url+'/donate/campaign/'+id,
                       { headers: { Authorization: authorization } }
                       ,res)
                       .then (data =>   
