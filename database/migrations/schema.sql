@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.2.1 on Tue Sep 24 13:53:06 2019
+-- File generated with SQLiteStudio v3.2.1 on Tue Sep 24 18:59:10 2019
 --
 -- Text encoding used: UTF-8
 --
@@ -378,6 +378,27 @@ INSERT INTO member (
                        '123 South Street, Mytown, NC'
                    );
 
+INSERT INTO member (
+                       id,
+                       username,
+                       password,
+                       type,
+                       name,
+                       email,
+                       phone,
+                       address
+                   )
+                   VALUES (
+                       4,
+                       'Mary',
+                       '$2a$10$NLzabaOO4cFJ.pGGv/HXDu0SlnvjTPqA84FWJT7XRcN8vCKXF78UG',
+                       'campaign',
+                       NULL,
+                       NULL,
+                       NULL,
+                       NULL
+                   );
+
 
 -- Table: route
 DROP TABLE IF EXISTS route;
@@ -400,7 +421,7 @@ INSERT INTO route (
                       1,
                       'get (/donate)',
                       NULL,
-                      'shows each route, a a sample body, and a description'
+                      'shows each route, a sample body, and a description'
                   );
 
 INSERT INTO route (
@@ -582,7 +603,7 @@ INSERT INTO route (
                       15,
                       'delete (/donate/campaign/:id)',
                       NULL,
-                      'deletes a record in the many to many donation ids and campaingn ids with a given id'
+                      'deletes a campaign with a given id'
                   );
 
 INSERT INTO route (
@@ -593,6 +614,19 @@ INSERT INTO route (
                   )
                   VALUES (
                       16,
+                      'delete (/donate/campaign/donattion/:id)',
+                      NULL,
+                      'deletes a record in the many to many donation ids and campaingn ids with a given id'
+                  );
+
+INSERT INTO route (
+                      id,
+                      route,
+                      body,
+                      description
+                  )
+                  VALUES (
+                      17,
                       'delete (/donate/donor/:id)',
                       NULL,
                       'deletes a donor with a given id'
@@ -605,7 +639,7 @@ INSERT INTO route (
                       description
                   )
                   VALUES (
-                      17,
+                      18,
                       'delete (/donate/donation/:id)',
                       NULL,
                       'deletes a donation with a given id'
@@ -618,7 +652,7 @@ INSERT INTO route (
                       description
                   )
                   VALUES (
-                      18,
+                      19,
                       'post (/donate/donation)',
                       ' {description: ''$5000 for Feed the Children'',money: 1,value: 321, location: ''Feed the children campaign'',date: ''2019-09-21'', donorid: 1 }',
                       'create a donation'
@@ -631,7 +665,7 @@ INSERT INTO route (
                       description
                   )
                   VALUES (
-                      19,
+                      20,
                       'post (/donate/donor)',
                       ' {name: ''Waldo Wayne'',email: ''waldo@waldo.com'',phone: ''212-555-5555'',address: ''123 Park Lane, Geneva, WI'',comdate: ''2019-09-21'',comtype: ''phone''}',
                       'create a donor'
@@ -644,7 +678,7 @@ INSERT INTO route (
                       description
                   )
                   VALUES (
-                      20,
+                      21,
                       'post (/donate/campaign/donation)',
                       ' { donationid: 1, campaignid: 2 }',
                       'create a record showing a donation id is linked to a particular campaign id'
@@ -657,7 +691,7 @@ INSERT INTO route (
                       description
                   )
                   VALUES (
-                      21,
+                      22,
                       'post (/donate/campaign)',
                       ' { name: ''Save the Whales'', description: ''Stop people from killing whales'', goal: 1000000 }',
                       'create a campaign'
@@ -670,7 +704,7 @@ INSERT INTO route (
                       description
                   )
                   VALUES (
-                      22,
+                      23,
                       'put (/donate/donation/:id)',
                       ' { description: ''$5000 for Feed the Children'', money: 1, value: 321, location: ''Feed the children campaign'', date: ''2019-09-21'',donorid: 1 }',
                       'update information about a donation'
@@ -683,7 +717,7 @@ INSERT INTO route (
                       description
                   )
                   VALUES (
-                      23,
+                      24,
                       'put (/donate/donor/:id)',
                       ' { name: ''Waldo Wayne'', email: ''waldo@waldo.com'', phone: ''212-555-5555'', address: ''123 Park Lane, Geneva, WI'', comdate: ''2019-09-21'', comtype: ''phone'' }',
                       'update information about a donor'
@@ -696,7 +730,7 @@ INSERT INTO route (
                       description
                   )
                   VALUES (
-                      24,
+                      25,
                       'put (/donate/member/:id)',
                       ' { username: ''user1'', password: ''something'', type: ''board'',email: ''waldo@waldo.com'',phone: ''212-555-5555'',address: ''123 Park Lane, Geneva, WI'' }',
                       'update information about a member'
@@ -709,7 +743,7 @@ INSERT INTO route (
                       description
                   )
                   VALUES (
-                      25,
+                      26,
                       'put (/donate/campaign/:id)',
                       ' {name: ''Save the Whales'', description: ''Stop people from killing whales'', goal: 1000000 }',
                       'update information about a campaign'
@@ -722,7 +756,7 @@ INSERT INTO route (
                       description
                   )
                   VALUES (
-                      26,
+                      27,
                       'put (/donate/campaign/donation/:id)',
                       ' { donationid: 1, campaignid: 2 }',
                       'update information about a donation id campaign id pairing'
@@ -735,7 +769,7 @@ INSERT INTO route (
                       description
                   )
                   VALUES (
-                      27,
+                      28,
                       'post (/donate/register/user)',
                       ' { username: ''user1'', password: ''something'',email: ''waldo@waldo.com'',phone: ''212-555-5555'',address: ''123 Park Lane, Geneva, WI''}',
                       'create a member account of type user'
@@ -748,7 +782,7 @@ INSERT INTO route (
                       description
                   )
                   VALUES (
-                      28,
+                      29,
                       'post (/donate/register/board)',
                       ' { username: ''user1'', password: ''something'',email: ''waldo@waldo.com'',phone: ''212-555-5555'',address: ''123 Park Lane, Geneva, WI''}',
                       'create a member account of type board'
@@ -761,7 +795,7 @@ INSERT INTO route (
                       description
                   )
                   VALUES (
-                      29,
+                      30,
                       'post (/donate/register/campaign)',
                       ' { username: ''user1'', password: ''something'',email: ''waldo@waldo.com'',phone: ''212-555-5555'',address: ''123 Park Lane, Geneva, WI'' }',
                       'create a member account of type campaign'
@@ -774,7 +808,7 @@ INSERT INTO route (
                       description
                   )
                   VALUES (
-                      30,
+                      31,
                       'post (/donate/login)',
                       ' { username: ''user1'', password: ''something'' }',
                       'log in for a member of any type'
