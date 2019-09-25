@@ -45,6 +45,7 @@ Posts to add new objects to working tables
 
 20	post (/donate/donor)
 {name: 'Waldo Wayne',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI',comdate: '2019-09-21',comtype: 'phone'}
+{name: 'Waldo Wayne'} minimum needed body
 
 21	post (/donate/campaign/donation)
 { donationid: 1, campaignid: 2 }
