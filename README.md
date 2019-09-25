@@ -120,7 +120,17 @@ Suggested for other calls to database
   (Some where else in your code you would have made an id like this)  id = 1
 
                 const authorization = localStorage.getItem('token') 
-                      axios.putt(url+'/donate/campaign/'+id,
+                      axios.put('https://donation-management.herokuapp.com/donate/campaign/'+id, req,
+                      { headers: { Authorization: authorization } }
+                      ,res)
+                      .then (data =>   
+                        {
+                          setData(data.data) 
+                       }
+                    )
+
+                const authorization = localStorage.getItem('token') 
+                      axios.get('https://donation-management.herokuapp.com/donate/campaign/',
                       { headers: { Authorization: authorization } }
                       ,res)
                       .then (data =>   
