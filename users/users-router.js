@@ -337,9 +337,11 @@ else {
       
 router.post('/login', (req, res) => {
   let { username, password } = req.body;
+  console.log('login username',username)
     Users.findBy('member',{ username })
     .first()
     .then(user => {
+// console.log('login user',user.id)
       if (user && bcrypt.compareSync(password, user.password)) {
         token = generateToken(user);
         user.token = token
@@ -353,7 +355,7 @@ console.log('post login decoded token',decoded)
       }
     })
     .catch(error => {
-      res.status(500).json(error);
+      res.status(500).json(error+'');
     });
 });
 
