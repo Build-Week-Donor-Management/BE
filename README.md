@@ -1,5 +1,4 @@
 # BE
-##### (This reads better if you read it in the Visual Studio Code applicaiton or click on the edit pencil icon in GitHub)
 
 ##### Here are the routes and their descriptions
 
