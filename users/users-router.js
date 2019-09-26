@@ -117,6 +117,7 @@ router.get('/',(req,res) => {
   });
 
   router.get('/member',authenticate,authenticate,(req,res) => {
+    console.log('enter get member')
     const decoded = jwt_decode(req.headers.authorization);
 
      console.log('member user',decoded)
@@ -220,7 +221,7 @@ router.get('/',(req,res) => {
   });
   
   router.put('/member/:id',authenticate,(req,res) => {
-    // console.log('id',req.params.id)
+    console.log('id',req.params.id)
      Users.update('member',req.params.id,req.body)
        .then(updated => {
            res.status(201).json(updated); 

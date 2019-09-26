@@ -57,15 +57,15 @@ Posts to add new objects to working tables
 Posts to register (make accounts) or log in
 
 28	post (/donate/register/user)
-{ username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI'}
+{ username: 'user1', password: 'something', type: 'board', name: 'Joe Doe' ,email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI' }
 { username: 'user1', password: 'something''} minimum needed body
 
 29	post (/donate/register/board)
-{ username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI'}
+{ username: 'user1', password: 'something', type: 'board', name: 'Joe Doe' ,email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI' }
 { username: 'user1', password: 'something''} minimum needed body
 
 30	post (/donate/register/campaign)
-{ username: 'user1', password: 'something',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI' }
+{ username: 'user1', password: 'something', type: 'board', name: 'Joe Doe' ,email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI' }
 { username: 'user1', password: 'something''} minimum needed body
 
 31	post (/donate/login)
@@ -82,7 +82,7 @@ minimum need to change at least one of the above key values
 minimum need to change at least one of the above key values
 
 25	put (/donate/member/:id)
-{ username: 'user1', password: 'something', type: 'board',email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI' }
+{ username: 'user1', password: 'something', type: 'board', name: 'Joe Doe' ,email: 'waldo@waldo.com',phone: '212-555-5555',address: '123 Park Lane, Geneva, WI' }
 minimum need to change at least one of the above key values
 
 26	put (/donate/campaign/:id)
