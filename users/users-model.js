@@ -30,11 +30,17 @@ function findById(view,id) {
 }
 
 
-function remove(tab,id) {
-  return  db.raw('delete from '+tab+' where id='+id)
-   }
+async function remove(tab,id) {
+  let result;
+  async function getold (tab,id) {
+    return await findById(tab,id);
+  }
+  result = getold(tab,id)
+     await db.raw('delete from '+tab+' where id='+id)
+     return result
+    }
   
-function update(table,id,body) {
-  return  db(table).where({id: id}).update(body)
-   }
+async function update(table,id,body) {
+  await db(table).where({id: id}).update(body)
+ return  db.raw('select * from member where id='+id)   }
     
