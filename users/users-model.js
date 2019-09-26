@@ -34,7 +34,7 @@ function remove(tab,id) {
   return  db.raw('delete from '+tab+' where id='+id)
    }
   
-function update(table,id,body) {
-  return  db(table).where({id: id}).update(body)
-   }
+async function update(table,id,body) {
+  await db(table).where({id: id}).update(body)
+ return  db.raw('select * from member where id='+id)   }
     
