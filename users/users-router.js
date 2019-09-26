@@ -8,6 +8,44 @@ const Users = require('../users/users-model.js');
 const secrets = require('../config/secrets.js'); //<<<<<<<
 const jwt_decode = require('jwt-decode');
 const authenticate = require('../auth/authenticate-middleware.js');
+// const nodemailer = require('nodemailer');
+
+// const transporter = nodemailer.createTransport({
+//   host: 'smtp.aol.com',
+//   port: 465,
+//   security:	'STARTTLS',
+//   secure: true, // true for 465, false for other ports
+// auth: {
+//     user: 'scottrenz@aol.com',
+//     pass: 'virg9441'
+//   }
+// });
+
+
+// let transport = nodemailer.createTransport({
+//   host: 'smtp.mailtrap.io',
+//   port: 2525,
+//   auth: {
+//      user: 'put_your_username_here',
+//      pass: 'put_your_password_here'
+//   }
+// });
+
+
+// const mailOptions = {
+//   from: 'candidateplacement@gmail.com',
+//   to: 'scott_renz@yahoo.com',
+//   subject: 'Sending Email using Node.js',
+//   text: 'That was easy!'
+// };
+
+// transporter.sendMail(mailOptions, function(error, info){
+//   if (error) {
+//     console.log(error);
+//   } else {
+//     console.log('Email sent: ' + info.response);
+//   }
+// }); 
 
 let token = '';
 // async function doit () {
@@ -181,7 +219,7 @@ router.get('/',(req,res) => {
       });
   });
   
-  router.put('/member',authenticate,(req,res) => {
+  router.put('/member/:id',authenticate,(req,res) => {
     // console.log('id',req.params.id)
      Users.update('member',req.params.id,req.body)
        .then(updated => {
@@ -371,3 +409,4 @@ function generateToken(user) {
 }
 
 module.exports = router;
+
