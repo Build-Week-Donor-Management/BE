@@ -1,12 +1,12 @@
 # BE
-(This reads better if you read it in the Visual Studio Code applicaiton or click on the edit pencil icon in GitHub)
+##### (This reads better if you read it in the Visual Studio Code applicaiton or click on the edit pencil icon in GitHub)
 
-Here are the routes and their descriptions
+##### Here are the routes and their descriptions
 
-And then again the routes that require a req.body, it shows them with the body
+##### And then again the routes that require a req.body, it shows them with the body
 
-1	get (/donate)		                    shows each route, a sample body, and a description
-2	get (/donate/member/user)		        shows the information for each member of type user
+# 1	get (/donate)		                    shows each route, a sample body, and a description
+# 2	get (/donate/member/user)		        shows the information for each member of type user
 3	get (/donate/member/board)		        shows the information for each member of type board
 4	get (/donate/member/campaign)		    shows the information for each member of type campaign
 5	get (/donate/campaign)		            shows the information for each campaign
