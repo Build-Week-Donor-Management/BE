@@ -242,8 +242,8 @@ router.get('/',(req,res) => {
 else {
   Users.remove(table,req.params.id)
   .then(removed => {
-      res.status(200).json(removed); 
-  })
+      res.status(200).json(removed);
+    })
         .catch(error => {
           res.status(500).json(error+'');
         });
