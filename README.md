@@ -112,7 +112,7 @@
 
        axios.post('https://donation-management.herokuapp.com/donate/register/'+type ,req,res)
  
- .then (data =>   
+      .then (data =>   
  
          {
            console.log('data',data)
@@ -125,7 +125,7 @@
 
        axios.post('https://donation-management.herokuapp.com/donate/login' ,req,res)
  
- .then (data =>   
+      .then (data =>   
          {
 
            console.log('data',data) 
