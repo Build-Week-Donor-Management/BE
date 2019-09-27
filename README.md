@@ -124,9 +124,12 @@
 ---
 
   axios.post('https://donation-management.herokuapp.com/donate/login' ,req,res)
+ 
  .then (data =>   
          {
+
            console.log('data',data) 
+
          localStorage.setItem('token', data.data.token) 
        }
      )
