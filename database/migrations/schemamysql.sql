@@ -1,22 +1,14 @@
---
--- File generated with SQLiteStudio v3.2.1 on Thu Sep 26 16:56:28 2019
---
--- Text encoding used: UTF-8
---
-PRAGMA foreign_keys = off;
-BEGIN TRANSACTION;
+-- for mySQL
 
 -- Table: campaign
 DROP TABLE IF EXISTS campaign;
 
 CREATE TABLE campaign (
-    id          INTEGER PRIMARY KEY AUTOINCREMENT,
-    name        VARCHAR(255) UNIQUE
-                        NOT NULL,
-    description VARCHAR,
+    id          INTEGER PRIMARY KEY AUTO_INCREMENT,
+    name        VARCHAR(255) NOT NULL,
+    description VARCHAR(255),
     goal        REAL    NOT NULL,
-    CHECK (goal >= 0 AND 
-           goal < 100000000000000) 
+            UNIQUE (name)
 );
 
 INSERT INTO campaign (id, name, description, goal) VALUES (1, 'Save the Whales', 'Stop people from killing whales', 99999.0);
@@ -27,11 +19,9 @@ INSERT INTO campaign (id, name, description, goal) VALUES (3, 'Stop Insomnia', '
 DROP TABLE IF EXISTS campaigndonation;
 
 CREATE TABLE campaigndonation (
-    id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    donationid INTEGER REFERENCES donation (id) 
-                       NOT NULL,
-    campaignid INTEGER REFERENCES campaign (id) 
-                       NOT NULL
+    id         INTEGER PRIMARY KEY AUTO_INCREMENT,
+    donationid INTEGER NOT NULL,
+    campaignid INTEGER NOT NULL
 );
 
 INSERT INTO campaigndonation (id, donationid, campaignid) VALUES (1, 1, 2);
@@ -42,21 +32,14 @@ INSERT INTO campaigndonation (id, donationid, campaignid) VALUES (3, 3, 2);
 DROP TABLE IF EXISTS donation;
 
 CREATE TABLE donation (
-    id          INTEGER  PRIMARY KEY AUTOINCREMENT,
-    description VARCHAR,
+    id          INTEGER  PRIMARY KEY AUTO_INCREMENT,
+    description VARCHAR(255),
     money       INTEGER  NOT NULL,
-    value       REAL     DEFAULT (0) 
+    value       REAL     DEFAULT 0 
                          NOT NULL,
-    location    VARCHAR,
+    location    VARCHAR(255),
     date        DATETIME,
-    donorid     INTEGER  REFERENCES donor (id) 
-                         NOT NULL,
-    CHECK ( (money = 1 OR 
-             money = 0) AND 
-            (date IS NULL OR 
-             (date(date) IS NOT NULL AND 
-              date(date) > date('now', '-5 years') AND 
-              date(date) < date('now', '+5 years') ) ) ) 
+    donorid     INTEGER  NOT NULL
 );
 
 INSERT INTO donation (id, description, money, value, location, date, donorid) VALUES (1, '$5000 for Feed the Children', 1, 321.0, 'Feed the children campaign', '2019-09-21', 1);
@@ -68,19 +51,13 @@ INSERT INTO donation (id, description, money, value, location, date, donorid) VA
 DROP TABLE IF EXISTS donor;
 
 CREATE TABLE donor (
-    id      INTEGER  PRIMARY KEY AUTOINCREMENT,
+    id      INTEGER  PRIMARY KEY AUTO_INCREMENT,
     name    VARCHAR(255)  NOT NULL,
-    email   VARCHAR,
-    phone   VARCHAR,
-    address VARCHAR,
+    email   VARCHAR(255),
+    phone   VARCHAR(255),
+    address VARCHAR(255),
     comdate DATETIME,
-    comtype VARCHAR,
-    CHECK ( (email IS NULL OR 
-             email LIKE '%_@%_.%_') AND 
-            (comdate IS NULL OR 
-             (date(comdate) IS NOT NULL AND 
-              date(comdate) > date('now', '-5 years') AND 
-              date(comdate) < date('now', '+5 years') ) ) ) 
+    comtype VARCHAR(255)
 );
 
 INSERT INTO donor (id, name, email, phone, address, comdate, comtype) VALUES (1, 'Waldo Wayne', 'new@hello.com', '212-555-5555', '123 Park Lane, Geneva, WI', '2019-09-21', 'phone');
@@ -92,19 +69,16 @@ INSERT INTO donor (id, name, email, phone, address, comdate, comtype) VALUES (4,
 DROP TABLE IF EXISTS member;
 
 CREATE TABLE member (
-    id       INTEGER       PRIMARY KEY AUTOINCREMENT,
+    id       INTEGER       PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(255)       NOT NULL
-                           UNIQUE,
+                           ,
     password VARCHAR(255)       NOT NULL,
-    type     VARCHAR,
-    name     VARCHAR,
+    type     VARCHAR(255),
+    name     VARCHAR(255),
     email    VARCHAR(255),
     phone    VARCHAR(255),
     address  VARCHAR(255),
-    CHECK (type = 'board' OR 
-           type = 'user' OR 
-           type = 'campaign') 
-);
+    UNIQUE(username));
 
 INSERT INTO member (id, username, password, type, name, email, phone, address) VALUES (1, 'user1', '$2a$10$s8T2qGSHhOr4EdkhCrEjWe41Ya9Gz3VL8QDPKrH.KZmls25Kwjfhm', 'board', 'Joe Smith', 'my@emai.com', '123-456-7890', '123 South Street, Mytown, NC');
 INSERT INTO member (id, username, password, type, name, email, phone, address) VALUES (2, 'user2', '$2a$10$m/jfO.aWCieTbU9rEIDQ4.5uh5ycdd16SB79kZKo54r9tj5AET79O', 'user', 'Joan Smith', 'my@emai.com', '212-212-1212', '123 South Street, Mytown, NC');
@@ -115,11 +89,11 @@ INSERT INTO member (id, username, password, type, name, email, phone, address) V
 DROP TABLE IF EXISTS route;
 
 CREATE TABLE route (
-    id          INTEGER       PRIMARY KEY AUTOINCREMENT,
-    route       VARCHAR(255) UNIQUE
-                              NOT NULL,
+    id          INTEGER       PRIMARY KEY AUTO_INCREMENT,
+    route       VARCHAR(255)  NOT NULL,
     body        VARCHAR(255),
-    description VARCHAR(255) 
+    description VARCHAR(255),
+    UNIQUE(route) 
 );
 
 INSERT INTO route (id, route, body, description) VALUES (1, 'get (/donate)', NULL, 'shows each route, a sample body, and a description');
@@ -232,12 +206,24 @@ CREATE VIEW campdonor AS
 -- View: campdons
 DROP VIEW IF EXISTS campdons;
 CREATE VIEW campdons AS
-    SELECT DISTINCT campaign.id AS campaign_id,
-                    campaign.*,
-                    donor.id AS donor_id,
-                    donor.*,
-                    donation.id AS donation_id,
-                    donation.*
+    SELECT DISTINCT
+campaign.id as campaign_id,
+campaign.name as c_name,
+campaign.description as c_description,
+campaign.goal as c_goal,
+donation.id as donation_id,
+donation.description as da_description,
+donation.money as da_money,
+donation.value as da_value,
+donation.location as da_location,
+donation.date as da_date,
+donor.id as donor_id,
+donor.name as dr_name,
+donor.email as dr_email,
+donor.phone as dr_phone,
+donor.address as dr_address,
+donor.comdate as dr_comdate,
+donor.comtype as dr_comtype
       FROM campaign,
            donor,
            donation,
@@ -247,13 +233,10 @@ CREATE VIEW campdons AS
            campaign.id = campaigndonation.campaignid;
 
 
+
 -- View: usermember
 DROP VIEW IF EXISTS usermember;
 CREATE VIEW usermember AS
     SELECT *
       FROM member
      WHERE type = 'user';
-
-
-COMMIT TRANSACTION;
-PRAGMA foreign_keys = on;
