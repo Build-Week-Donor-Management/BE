@@ -8,6 +8,22 @@ const Users = require('../users/users-model.js');
 const secrets = require('../config/secrets.js'); //<<<<<<<
 const jwt_decode = require('jwt-decode');
 const authenticate = require('../auth/authenticate-middleware.js');
+
+// const mysql = require('mysql')
+
+
+// const connection = mysql.createConnection({
+//   host: 'propertyfastorg.powwebmysql.com',
+//   user: 'propertyfastorg',
+//   password: 'Home9441*',
+//   database: 'donation_management'
+// }
+// )
+
+// connection.connect(function(err) {
+//   if (err) throw err
+//   console.log('You are now connected...')
+// })
 // const nodemailer = require('nodemailer');
 
 // const transporter = nodemailer.createTransport({
@@ -42,7 +58,7 @@ const authenticate = require('../auth/authenticate-middleware.js');
 // transporter.sendMail(mailOptions, function(error, info){
 //   if (error) {
 //     console.log(error);
-//   } else {
+//   } el
 //     console.log('Email sent: ' + info.response);
 //   }
 // }); 
@@ -69,7 +85,6 @@ router.get('/',(req,res) => {
         res.status(500).json(error+'');
       });
   });
-
   router.get('/member/user',authenticate,(req,res) => {
 
 // Get saved data from sessionStorage
