@@ -98,10 +98,12 @@
 #####   (Some where else in your code you would have made a type like this) type = 'user'
 
   axios.post('https://donation-management.herokuapp.com/donate/register/'+type ,req,res)
+ 
  .then (data =>   
+ 
          {
            console.log('data',data)
-            
+
          localStorage.setItem('token', data.data.token) 
        }
      )
