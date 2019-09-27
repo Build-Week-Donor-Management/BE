@@ -4,6 +4,8 @@
 
 ##### And then again the routes that require a req.body, it shows them with the body
 
+---
+
 ##### 1	get (/donate)		                    shows each route, a sample body, and a description
 ##### 2	get (/donate/member/user)		        shows the information for each member of type user
 ##### 3	get (/donate/member/board)		        shows the information for each member of type board
@@ -36,7 +38,12 @@
 ##### 30	post (/donate/register/campaign)	 	create a member account of type campaign
 ##### 31	post (/donate/login)	                logs you in
 
+---
+
+
 #### Posts to add new objects to working tables
+
+---
 
 ##### 19	post (/donate/donation)
 ##### {description: '$5000 for Feed the Children',money: 1,value: 321, location: 'Feed the children campaign',date: '2019-09-21', donorid: 1 }
@@ -92,10 +99,16 @@
 ##### { donationid: 1, campaignid: 2 }
 ##### minimum need to change at least one of the above key values
 
+---
+
+
 #### Suggested register and login calls to database
 
 #####   (Some where else in your code you would have made a request object like this) req = {username: username, password: password}
 #####   (Some where else in your code you would have made a type like this) type = 'user'
+
+
+---
 
   axios.post('https://donation-management.herokuapp.com/donate/register/'+type ,req,res)
  
@@ -108,6 +121,8 @@
        }
      )
 
+---
+
   axios.post('https://donation-management.herokuapp.com/donate/login' ,req,res)
  .then (data =>   
          {
@@ -116,11 +131,14 @@
        }
      )
 
+---
 
 #### Suggested for other calls to database
 
 #####   (Some where else in your code you would have made a request object like this)  req = {"goal": "99998"}
 #####   (Some where else in your code you would have made an id like this)  id = 1
+
+---
 
                  const authorization = localStorage.getItem('token') 
                        axios.put('https://donation-management.herokuapp.com/donate/campaign/'+id, req,
@@ -131,6 +149,8 @@
                            setData(data.data) 
                         }
                     )
+
+---
 
                  const authorization = localStorage.getItem('token') 
                        axios.get('https://donation-management.herokuapp.com/donate/campaign/',
