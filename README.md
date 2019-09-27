@@ -97,21 +97,21 @@
 #####   (Some where else in your code you would have made a request object like this) req = {username: username, password: password}
 #####   (Some where else in your code you would have made a type like this) type = 'user'
 
-...  axios.post('https://donation-management.herokuapp.com/donate/register/'+type ,req,res)
-... .then (data =>   
-...         {
-...           console.log('data',data) 
-...         localStorage.setItem('token', data.data.token) 
-...       }
-...     )
+..*  axios.post('https://donation-management.herokuapp.com/donate/register/'+type ,req,res)
+..* .then (data =>   
+..*         {
+..*           console.log('data',data) 
+..*         localStorage.setItem('token', data.data.token) 
+..*       }
+..*     )
 
-...  axios.post('https://donation-management.herokuapp.com/donate/login' ,req,res)
-... .then (data =>   
-...         {
-...           console.log('data',data) 
-...         localStorage.setItem('token', data.data.token) 
-...       }
-...     )
+..*  axios.post('https://donation-management.herokuapp.com/donate/login' ,req,res)
+..* .then (data =>   
+..*         {
+..*           console.log('data',data) 
+..*         localStorage.setItem('token', data.data.token) 
+..*       }
+..*     )
 
 
 #### Suggested for other calls to database
@@ -119,22 +119,22 @@
 #####   (Some where else in your code you would have made a request object like this)  req = {"goal": "99998"}
 #####   (Some where else in your code you would have made an id like this)  id = 1
 
-...                 const authorization = localStorage.getItem('token') 
-...                       axios.put('https://donation-management.herokuapp.com/donate/campaign/'+id, req,
-...                       { headers: { Authorization: authorization } }
-...                       ,res)
-...                       .then (data =>   
-...                         {
-...                           setData(data.data) 
-...                        }
-...                    )
+..*                 const authorization = localStorage.getItem('token') 
+..*                       axios.put('https://donation-management.herokuapp.com/donate/campaign/'+id, req,
+..*                       { headers: { Authorization: authorization } }
+..*                       ,res)
+..*                       .then (data =>   
+..*                         {
+..*                           setData(data.data) 
+..*                        }
+..*                    )
 
-...                 const authorization = localStorage.getItem('token') 
-...                       axios.get('https://donation-management.herokuapp.com/donate/campaign/',
-...                       { headers: { Authorization: authorization } }
-...                       ,res)
-...                       .then (data =>   
-...                         {
-...                           setData(data.data) 
-...                        }
-...                     )
+..*                 const authorization = localStorage.getItem('token') 
+..*                       axios.get('https://donation-management.herokuapp.com/donate/campaign/',
+..*                       { headers: { Authorization: authorization } }
+..*                       ,res)
+..*                       .then (data =>   
+..*                         {
+..*                           setData(data.data) 
+..*                        }
+..*                     )
