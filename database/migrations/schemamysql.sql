@@ -21,7 +21,8 @@ DROP TABLE IF EXISTS campaigndonation;
 CREATE TABLE campaigndonation (
     id         INTEGER PRIMARY KEY AUTO_INCREMENT,
     donationid INTEGER NOT NULL,
-    campaignid INTEGER NOT NULL
+    campaignid INTEGER NOT NULL,
+    UNIQUE(donationid,campaignid)
 );
 
 INSERT INTO campaigndonation (id, donationid, campaignid) VALUES (1, 1, 2);
@@ -39,7 +40,8 @@ CREATE TABLE donation (
                          NOT NULL,
     location    VARCHAR(255),
     date        DATETIME,
-    donorid     INTEGER  NOT NULL
+    donorid     INTEGER  NOT NULL,
+    UNIQUE(description)
 );
 
 INSERT INTO donation (id, description, money, value, location, date, donorid) VALUES (1, '$5000 for Feed the Children', 1, 321.0, 'Feed the children campaign', '2019-09-21', 1);
@@ -57,7 +59,8 @@ CREATE TABLE donor (
     phone   VARCHAR(255),
     address VARCHAR(255),
     comdate DATETIME,
-    comtype VARCHAR(255)
+    comtype VARCHAR(255),
+    UNIQUE(name)
 );
 
 INSERT INTO donor (id, name, email, phone, address, comdate, comtype) VALUES (1, 'Waldo Wayne', 'new@hello.com', '212-555-5555', '123 Park Lane, Geneva, WI', '2019-09-21', 'phone');
@@ -78,7 +81,8 @@ CREATE TABLE member (
     email    VARCHAR(255),
     phone    VARCHAR(255),
     address  VARCHAR(255),
-    UNIQUE(username));
+    UNIQUE(username)
+    );
 
 INSERT INTO member (id, username, password, type, name, email, phone, address) VALUES (1, 'user1', '$2a$10$s8T2qGSHhOr4EdkhCrEjWe41Ya9Gz3VL8QDPKrH.KZmls25Kwjfhm', 'board', 'Joe Smith', 'my@emai.com', '123-456-7890', '123 South Street, Mytown, NC');
 INSERT INTO member (id, username, password, type, name, email, phone, address) VALUES (2, 'user2', '$2a$10$m/jfO.aWCieTbU9rEIDQ4.5uh5ycdd16SB79kZKo54r9tj5AET79O', 'user', 'Joan Smith', 'my@emai.com', '212-212-1212', '123 South Street, Mytown, NC');
