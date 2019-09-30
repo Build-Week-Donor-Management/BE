@@ -4,10 +4,19 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const db = require('../database/dbConfig.js');
 
-const Users = require('../users/users-model.js');
+const Users = require('../users/users-model-my.js');
 const secrets = require('../config/secrets.js'); //<<<<<<<
 const jwt_decode = require('jwt-decode');
 const authenticate = require('../auth/authenticate-middleware.js');
+
+// const axios = require('axios');
+
+// async function php () {
+//   let routes = await  axios.get('http://theamericanlanguage.com/notbroadway/index.php')
+//   console.log('routes',routes.data)
+  
+// }
+// php()
 
 // const mysql = require('mysql')
 
@@ -15,7 +24,7 @@ const authenticate = require('../auth/authenticate-middleware.js');
 // const connection = mysql.createConnection({
 //   host: 'propertyfastorg.powwebmysql.com',
 //   user: 'propertyfastorg',
-//   password: 'Home9441*',
+//   password: 'xxx',
 //   database: 'donation_management'
 // }
 // )
@@ -125,6 +134,7 @@ router.get('/',(req,res) => {
       .then(user => {
   // console.log('get user',user)
         res.status(200).json(user);
+        // res.status(200).send(user);
       })
       .catch(error => {
         res.status(500).json(error+'');
@@ -237,7 +247,13 @@ router.get('/',(req,res) => {
   
   router.put('/member/:id',authenticate,(req,res) => {
     console.log('id',req.params.id)
-     Users.update('member',req.params.id,req.body)
+    console.log('req.body.password',req.body.password)
+    if(req.body.password)
+    {
+      const hash = bcrypt.hashSync(req.body.password, 10); // 2 ^ n
+      req.body.password = hash;
+    }
+       Users.update('member',req.params.id,req.body)
        .then(updated => {
            res.status(201).json(updated); 
        })
@@ -250,7 +266,7 @@ router.get('/',(req,res) => {
     const decoded = jwt_decode(req.headers.authorization);
     const username = decoded.username
     console.log(table,'going to see if authorized',username)
-    db.raw(`select count(username) as countit from member where type='${type}' and username ='${username}'`)
+    Users.raw(`select count(username) as countit from member where type='${type}' and username ='${username}'`)
       .then(result => {
         console.log('result',result[0].countit)
         if(!result[0].countit)
@@ -274,15 +290,21 @@ else {
     const decoded = jwt_decode(req.headers.authorization);
     const username = decoded.username
     console.log(table,'going to see if authorized',username)
-    db.raw(`select count(username) as countit from member where type='${type}' and username ='${username}'`)
+    Users.raw(`select count(username) as countit from member where type='${type}' and username ='${username}'`)
       .then(result => {
         console.log('result',result[0].countit)
         if(!result[0].countit)
         res.status(401).json('not authorized');
 else {
-        Users.update(table,req.params.id,req.body)
+console.log('req.body.password',req.body.password)
+  if(req.body.password)
+  {
+    const hash = bcrypt.hashSync(req.body.password, 10); // 2 ^ n
+    req.body.password = hash;
+  }
+          Users.update(table,req.params.id,req.body)
         .then(updated => {
-            res.status(201).json('updated '+updated); 
+            res.status(201).json(updated); 
         })
         .catch(error => {
           res.status(500).json(error+'');
@@ -294,17 +316,22 @@ else {
       });
   }
 
- function postRoute (req,res,table,type) {
+ function postRoute (req,res,table,type,colname,coldata) {
      const decoded = jwt_decode(req.headers.authorization);
      const username = decoded.username
      console.log(table,'going to see if authorized',username)
-     db.raw(`select count(username) as countit from member where type='${type}' and username ='${username}'`)
+     Users.raw(`select count(username) as countit from member where type='${type}' and username ='${username}'`)
        .then(result => {
          console.log('result',result[0].countit)
          if(!result[0].countit)
          res.status(401).json('not authorized');
  else {
-  Users.add(table,req.body)
+if(req.body.password)
+{
+  const hash = bcrypt.hashSync(user.password, 10); // 2 ^ n
+  req.body.password = hash;
+}
+  Users.add(table,req.body,colname,coldata)
   .then(updated => {
       res.status(201).json(updated); 
   })
@@ -326,19 +353,19 @@ else {
    router.put('/campaign/donation/:id',authenticate,(req,res) => postRoute(req, res, 'campaigndonation','user'))
    router.put('/donation/:id',authenticate,(req,res) => putRoute(req, res, 'donation','user'))
    router.put('/donor/:id',authenticate,(req,res) => putRoute(req, res, 'donor','user'))
-   router.post('/campaign',authenticate,(req,res) => postRoute(req, res, 'campaign','campaign'))
-   router.post('/campaign/donation',authenticate,(req,res) => postRoute(req, res, 'campaigndonation','user'))
-   router.post('/donation',authenticate,(req,res) => postRoute(req, res, 'donation','user'))
-   router.post('/donor',authenticate,(req,res) => postRoute(req, res, 'donor','user'))
+   router.post('/campaign',authenticate,(req,res) => postRoute(req, res, 'campaign','campaign','name',req.body.name))
+   router.post('/campaign/donation',authenticate,(req,res) => postRoute(req, res, 'campaigndonation','user','concat(donationid,char(126),campaignid)',req.body.donationid+'~'+req.body.campaignid))
+   router.post('/donation',authenticate,(req,res) => postRoute(req, res, 'donation','user','concat(description,char(126),donorid',req.body.description+'~'+req.body.donorid))
+   router.post('/donor',authenticate,(req,res) => postRoute(req, res, 'donor','user','name',req.body.name))
 
    router.post('/register/user' ,(req, res) => {
     // console.log('req',req.body)
     let user = req.body;
-    const hash = bcrypt.hashSync(user.password, 10); // 2 ^ n
+    const hash = bcrypt.hashSync(user.password, 12); // 2 ^ n
     user.password = hash;
     user.type = 'user'
   console.log('register user',user)
-    Users.add('member',user)
+    Users.add('member',user,'username',user.username)
       .then(saved => {
   console.log('saved',saved)
         token =generateToken(user)
@@ -358,7 +385,7 @@ else {
     user.password = hash;
     user.type = 'board'
   // console.log('register board',user)
-    Users.add('member',user)
+    Users.add('member',user,'username',user.username)
       .then(saved => {
   // console.log('saved',saved)
         token =generateToken(user)
@@ -377,7 +404,7 @@ else {
     user.password = hash;
     user.type = 'campaign'
   // console.log('register campaign',user)
-    Users.add('member',user)
+    Users.add('member',user,'username',user.username)
       .then(saved => {
   // console.log('saved',saved)
         token =generateToken(user)
@@ -392,8 +419,7 @@ else {
 router.post('/login', (req, res) => {
   let { username, password } = req.body;
   console.log('login username',username)
-    Users.findBy('member',{ username })
-    .first()
+    Users.findBy('member',"username = '" + username + "'" )
     .then(user => {
 // console.log('login user',user.id)
       if (user && bcrypt.compareSync(password, user.password)) {
