@@ -359,7 +359,7 @@ if(req.body.password)
    router.post('/donor',authenticate,(req,res) => postRoute(req, res, 'donor','user','name',req.body.name))
 
    router.post('/register/user' ,(req, res) => {
-    // console.log('req',req.body)
+    console.log('req',req.body)
     let user = req.body;
     const hash = bcrypt.hashSync(user.password, 12); // 2 ^ n
     user.password = hash;
