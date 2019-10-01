@@ -20,7 +20,7 @@ async function find(table) {
 
 async function findBy(table,filter) {
   select = 'select * from ' + table + ' where ' + filter + ' limit 1'
-select = percentUrl(select)
+select = percentUrl(select,true)
   console.log('findby select',select)
   let r_out = await  axios.get('http://theamericanlanguage.com/notbroadway/select.php?s=' + select)
   console.log('r_out.data',r_out.data)
@@ -28,7 +28,7 @@ select = percentUrl(select)
   // return db.raw('select * from '+view+' order by 1');
 }
 async function raw(query) {
-query = percentUrl(query)
+query = percentUrl(query,true)
   let r_out = await  axios.get('http://theamericanlanguage.com/notbroadway/select.php?s=' + query)
   return (r_out.data)
   // return db.raw('select * from '+view+' order by 1');
@@ -68,9 +68,9 @@ console.log('insert',insert)
 let r_out = await  axios.get('http://theamericanlanguage.com/notbroadway/raw.php?i=' + insert)
 if (r_out)
 {
-  let result = await  axios.get('http://theamericanlanguage.com/notbroadway/test.php?t=' + table + '&c=' + c + '&v=' + v)
-console.log('result.data v',result.data,v)
-  if (result.data.trim() !== vv.trim())
+let result = await  axios.get('http://theamericanlanguage.com/notbroadway/test.php?t=' + table + '&c=' + c + '&v=' + v)
+console.log('result.data v',result.data,slashOut(v))
+  if (result.data.trim() !== slashOut(vv.trim()))
 return  'insert failed to get result'
 }
 else
@@ -85,7 +85,6 @@ function findById(view,id) {
     .first();
 }
 
-
 async function remove(tab,id) {
   result = await raw('select * from ' + tab + ' where id=' + id)
   await raw('delete from '+tab+' where id='+id)
@@ -94,11 +93,11 @@ async function remove(tab,id) {
      return result[0]
     }
   
-async function update(table,id,body) {
+// async function update(table,id,body) {
 
 
-  await db(table).where({id: id}).update(body)
- return  db.raw('select * from member where id='+id)   }
+//   await db(table).where({id: id}).update(body)
+//  return  db.raw('select * from member where id='+id)   }
     
  async function update(table,id,body) {
   const k = Object.keys(body)
@@ -130,7 +129,7 @@ body = await  axios.get('http://theamericanlanguage.com/notbroadway/result.php?t
 return body.data
 }
 
-function percentUrl(v) {
+function percentUrl(v,t) {
   let valv = ''
 for(let i=0;i<v.length;i++)
 {
@@ -145,7 +144,13 @@ valv = valv + '%24'
 else if(v[i] === "%")
 valv = valv + '%25'
 else if(v[i] === "'")
+{
+if(t)  
 valv = valv + '%27'
+else
+valv = valv + `%5C`
+valv = valv + '%27'
+}
 else if(v[i] === "(")
 valv = valv + '%28'
 else if(v[i] === ")")
@@ -178,4 +183,24 @@ else
   // valv = valv + '%27'
 }
 return valv
+}
+function slashOut(v) {
+  let valv = ''
+for(let i=0;i<v.length;i++)
+{
+if(v[i] === "\\" && v[i+1] === "'" )
+valv = valv
+else
+  valv = valv + v[i]
+  // if(v[i] === "'")
+  // valv = valv + '%27'
+}
+return valv
+}
+function slashIn(v) {
+
+  while (v.includes("%27")) {
+    v =  v.replace('%27', "%5C'")
+  } 
+return v
 }
